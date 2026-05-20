@@ -1,0 +1,449 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Assinatura</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f3f3f3;
+    padding:40px 20px;
+    color:#333;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:35px;
+    box-shadow:0 10px 35px rgba(0,0,0,0.08);
+}
+
+.topo{
+    margin-bottom:35px;
+}
+
+.topo h1{
+    font-size:32px;
+    color:#4c7259;
+    margin-bottom:8px;
+}
+
+.topo p{
+    color:#777;
+    font-size:15px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group.full{
+    grid-column:1 / -1;
+}
+
+label{
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:bold;
+    color:#666;
+}
+
+input{
+    height:50px;
+    border-radius:12px;
+    border:1px solid #d8d8d8;
+    padding:0 16px;
+    font-size:15px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#4c7259;
+}
+
+.preview{
+    margin-top:45px;
+}
+
+.preview-title{
+    font-size:20px;
+    font-weight:bold;
+    color:#4c7259;
+    margin-bottom:18px;
+}
+
+.preview-box{
+    background:#eaeaea;
+    padding:35px;
+    border-radius:16px;
+    overflow:auto;
+}
+
+#assinatura{
+    width:760px;
+    background:#fff;
+    padding:35px;
+}
+
+.nome{
+    font-size:30px;
+    font-weight:bold;
+    color:#222;
+    margin-bottom:6px;
+}
+
+.cargo{
+    font-size:19px;
+    color:#666;
+    margin-bottom:6px;
+}
+
+.ramal{
+    font-size:16px;
+    color:#4c7259;
+    font-weight:bold;
+    margin-bottom:28px;
+}
+
+.ass-img{
+    width:100%;
+    display:block;
+}
+
+.botoes{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+button{
+    height:50px;
+    border:none;
+    padding:0 24px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn-download{
+    background:#4c7259;
+    color:white;
+}
+
+.btn-download:hover{
+    background:#355240;
+}
+
+.btn-html{
+    background:#ececec;
+    color:#333;
+}
+
+.btn-html:hover{
+    background:#dddddd;
+}
+
+.info{
+    margin-top:20px;
+    color:#666;
+    line-height:1.7;
+    font-size:14px;
+}
+
+@media(max-width:800px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    #assinatura{
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="topo">
+
+            <h1>Gerador de Assinatura</h1>
+
+            <p>
+                Paese, Ferreira & Advogados Associados
+            </p>
+
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>Nome completo</label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    placeholder="Ex: Gabriel Angelo Hadad"
+                    oninput="renderizar()"
+                >
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>Cargo</label>
+
+                <input
+                    type="text"
+                    id="cargo"
+                    placeholder="Ex: Auxiliar de Tecnologia"
+                    oninput="renderizar()"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Ramal</label>
+
+                <input
+                    type="text"
+                    id="ramal"
+                    placeholder="Ex: 5231"
+                    oninput="renderizar()"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="preview">
+
+            <div class="preview-title">
+
+                Preview da assinatura
+
+            </div>
+
+            <div class="preview-box">
+
+                <div id="assinatura">
+
+                    <div
+                        class="nome"
+                        id="previewNome"
+                    >
+                        Seu Nome
+                    </div>
+
+                    <div
+                        class="cargo"
+                        id="previewCargo"
+                    >
+                        Seu Cargo
+                    </div>
+
+                    <div
+                        class="ramal"
+                        id="previewRamal"
+                    >
+                        Ramal: 0000
+                    </div>
+
+                    <img
+                        src="img/logoPad.png"
+                        class="ass-img"
+                        alt="Assinatura"
+                        crossorigin="anonymous"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="botoes">
+
+                <button
+                    class="btn-download"
+                    onclick="baixarPNG()"
+                >
+                    Baixar PNG
+                </button>
+
+                <button
+                    class="btn-html"
+                    onclick="copiarHTML()"
+                >
+                    Copiar HTML
+                </button>
+
+            </div>
+
+            <div class="info">
+
+                <strong>PNG:</strong>
+                recomendado para Outlook.<br>
+
+                <strong>HTML:</strong>
+                útil para assinaturas HTML corporativas.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function renderizar(){
+
+    const nome =
+        document
+        .getElementById('nome')
+        .value
+        || 'Seu Nome';
+
+    const cargo =
+        document
+        .getElementById('cargo')
+        .value
+        || 'Seu Cargo';
+
+    const ramal =
+        document
+        .getElementById('ramal')
+        .value
+        || '0000';
+
+    document
+        .getElementById('previewNome')
+        .innerText = nome;
+
+    document
+        .getElementById('previewCargo')
+        .innerText = cargo;
+
+    document
+        .getElementById('previewRamal')
+        .innerText = 'Ramal: ' + ramal;
+
+}
+
+async function baixarPNG(){
+
+    const area =
+        document.getElementById('assinatura');
+
+    const imagem =
+        document.querySelector('.ass-img');
+
+    if(!imagem.complete){
+
+        await new Promise(resolve => {
+
+            imagem.onload = resolve;
+
+        });
+
+    }
+
+    html2canvas(area,{
+
+        scale:4,
+        useCORS:true,
+        allowTaint:true,
+        backgroundColor:'#ffffff',
+        logging:false
+
+    }).then(canvas => {
+
+        const link =
+            document.createElement('a');
+
+        const nomeArquivo =
+            document
+            .getElementById('nome')
+            .value
+            .trim()
+            .replace(/\s+/g,'_')
+            || 'assinatura';
+
+        link.download =
+            'assinatura_' +
+            nomeArquivo +
+            '.png';
+
+        link.href =
+            canvas.toDataURL('image/png',1.0);
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+    });
+
+}
+
+function copiarHTML(){
+
+    const html =
+        document
+        .getElementById('assinatura')
+        .innerHTML;
+
+    navigator
+        .clipboard
+        .writeText(html);
+
+    alert('HTML copiado!');
+
+}
+
+renderizar();
+
+</script>
+
+</body>
+
+</html>
