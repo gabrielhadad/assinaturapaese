@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Gerador de Assinatura | Paese, Ferreira & Advogados</title>
-    <!-- html2canvas para captura de imagem -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
@@ -14,25 +13,11 @@
         }
 
         body {
-            /* fallback para caso Dax não carregue imediatamente, usamos uma família sem serifa elegante */
             font-family: 'Dax', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
             background: #f3f3f3;
             padding: 40px 20px;
             color: #1e2e26;
         }
-
-        /* Definição da fonte Dax: carregamento via regra @font-face 
-           Usamos uma fonte Dax genérica disponível publicamente? 
-           Dax é uma fonte comercial, mas fornecemos fallback e carregamento de uma variante similar.
-           Para garantir a aparência, usamos a fonte "Dax" com fallback para "Daxline" e sans-serif.
-           Incluímos também o recurso de fonte do Google? Não há versão gratuita direta da Dax, 
-           mas simulamos com uma fonte muito próxima: 'Dax', 'DaxlinePro', 'Montserrat'? 
-           Para melhor fidelidade, usamos 'Dax' e adicionamos uma fonte alternativa licenciada gratuita 
-           com aspecto moderno. Contudo, o pedido é "a fonte que precisa ser o texto que vou digitar ali 
-           o nome da pessoa etc tem que ser a Dax". Aplicamos 'Dax' como primeira escolha e como fallback 
-           uma família sem serifa de alta qualidade. O usuário tendo a fonte instalada no sistema, exibirá Dax.
-           Para máxima consistência, também adicionamos estilo robusto.
-        */
 
         @font-face {
             font-family: 'Dax';
@@ -60,7 +45,6 @@
             border-radius: 28px;
             padding: 35px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            transition: all 0.2s;
         }
 
         .topo {
@@ -104,25 +88,34 @@
             text-transform: uppercase;
         }
 
-        input {
-            height: 54px;
+        input, textarea {
             border-radius: 14px;
             border: 1px solid #d0dbd4;
             background: #fefefe;
-            padding: 0 18px;
             font-size: 16px;
             font-family: 'Dax', 'Segoe UI', monospace;
             transition: 0.2s;
             color: #1e2e26;
         }
 
-        input:focus {
+        input {
+            height: 54px;
+            padding: 0 18px;
+        }
+
+        textarea {
+            padding: 14px 18px;
+            resize: vertical;
+            line-height: 1.4;
+            min-height: 85px;
+        }
+
+        input:focus, textarea:focus {
             outline: none;
             border-color: #4c7259;
             box-shadow: 0 0 0 3px rgba(76, 114, 89, 0.1);
         }
 
-        /* área de preview */
         .preview {
             margin-top: 45px;
         }
@@ -145,7 +138,6 @@
             justify-content: center;
         }
 
-        /* Assinatura padrão: 100% até 760px */
         #assinatura {
             width: 760px;
             max-width: 100%;
@@ -153,40 +145,38 @@
             padding: 32px 35px 35px 35px;
             border-radius: 20px;
             box-shadow: 0 12px 20px rgba(0, 0, 0, 0.02);
-            transition: all 0.2s;
             font-family: 'Dax', 'Segoe UI', 'Roboto', sans-serif;
         }
 
-        /* estilos tipográficos conforme identidade visual - fonte Dax obrigatória */
+        /* COR AJUSTADA: nome em cinza opaco sofisticado */
         .nome {
             font-size: 32px;
             font-weight: 700;
-            color: #101d17;
+            color: #2C3E35;
             margin-bottom: 6px;
             letter-spacing: -0.3px;
             font-family: 'Dax', 'Segoe UI', sans-serif;
             line-height: 1.2;
         }
 
-        .cargo {
+        .cargo-linha {
             font-size: 18px;
             color: #4b6b5a;
-            margin-bottom: 8px;
             font-weight: 500;
             font-family: 'Dax', 'Segoe UI', sans-serif;
             letter-spacing: -0.2px;
+            line-height: 1.45;
+            white-space: pre-wrap;
         }
 
-        /* remover completamente qualquer vestígio de ramal: não existe mais classe .ramal e nenhum elemento de ramal */
         .ass-img {
             width: 100%;
             max-width: 100%;
             display: block;
-            margin-top: 18px;
+            margin-top: 24px;
             border-radius: 6px;
         }
 
-        /* botões */
         .botoes {
             margin-top: 30px;
             display: flex;
@@ -236,7 +226,6 @@
             color: #5f7168;
             line-height: 1.6;
             font-size: 13px;
-            font-family: monospace;
         }
 
         .info strong {
@@ -255,22 +244,12 @@
             .nome {
                 font-size: 26px;
             }
-            .cargo {
+            .cargo-linha {
                 font-size: 16px;
             }
             .preview-box {
                 padding: 20px;
             }
-        }
-
-        /* garantir que não haja qualquer resquício de ramal */
-        .ramal-hidden {
-            display: none !important;
-        }
-
-        /* ajuste fino */
-        .ass-img {
-            margin-top: 24px;
         }
     </style>
 </head>
@@ -278,174 +257,142 @@
 <div class="container">
     <div class="card">
         <div class="topo">
-            <h1>✧ Gerador de Assinatura</h1>
-            <p>Paese, Ferreira & Advogados Associados · Assinatura profissional com fonte Dax</p>
+            <h1>Gerador de Assinatura</h1>
+            <p>Paese, Ferreira & Advogados Associados</p>
         </div>
 
         <div class="form-grid">
             <div class="form-group">
-                <label>📝 Nome completo</label>
-                <input type="text" id="nome" placeholder="Ex: Dra. Beatriz Paese" value="" oninput="renderizarAssinatura()">
+                <label>Nome completo</label>
+                <input type="text" id="nome" placeholder="Ex: Dra. Beatriz Paese" oninput="renderizarAssinatura()">
             </div>
 
             <div class="form-group">
-                <label>🏢 Setor / Cargo</label>
-                <input type="text" id="cargo" placeholder="Ex: Sócia - Direito Empresarial" value="" oninput="renderizarAssinatura()">
+                <label>Setor / Cargo + OAB (aperte Enter para quebrar linha)</label>
+                <textarea id="cargoOab" rows="2" placeholder="Ex: Sócia - Direito Empresarial&#10;OAB/SP 123.456" oninput="renderizarAssinatura()"></textarea>
+                <div style="font-size: 12px; color: #6c8b7a; margin-top: 6px;">✓ Use a tecla Enter para digitar o número da OAB na linha de baixo. Deixe vazio se não quiser nada.</div>
             </div>
-
-            <!-- Nenhum campo de ramal foi incluso, pois a funcionalidade foi completamente removida -->
         </div>
 
         <div class="preview">
-            <div class="preview-title">📎 Visualização da assinatura</div>
+            <div class="preview-title">Preview da assinatura</div>
             <div class="preview-box">
                 <div id="assinatura">
                     <div class="nome" id="previewNome">Seu Nome</div>
-                    <div class="cargo" id="previewCargo">Seu Cargo / Setor</div>
-                    <!-- não existe mais elemento de ramal, nem espaço, nem legado -->
+                    <div class="cargo-linha" id="previewCargoOab">Seu cargo ou setor</div>
                     <img src="img/logoPad.png" class="ass-img" alt="Paese, Ferreira & Advogados" crossorigin="anonymous" id="logoAssinatura">
                 </div>
             </div>
             <div class="botoes">
-                <button class="btn-download" onclick="baixarPNG()">📸 Baixar PNG (Outlook)</button>
-                <button class="btn-html" onclick="copiarHTML()">📋 Copiar HTML</button>
+                <button class="btn-download" onclick="baixarPNG()">Baixar PNG</button>
+                <button class="btn-html" onclick="copiarHTML()">Copiar HTML</button>
             </div>
             <div class="info">
-                <strong>✔ Fonte Dax aplicada</strong> · O texto da assinatura utiliza exclusivamente a tipografia Dax.<br>
-                <strong>PNG:</strong> Ideal para Outlook e programas de e-mail. <strong>HTML:</strong> Código semântico para assinaturas corporativas.
+                <strong>PNG:</strong> recomendado para Outlook.<br>
+                <strong>HTML:</strong> útil para assinaturas HTML corporativas.<br>
+                <strong>Campo múltiplas linhas:</strong> Digite o cargo e, se desejar, pressione Enter e escreva a OAB abaixo.
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Função principal de renderização - sem nenhuma referência a ramal
     function renderizarAssinatura() {
-        // Obtém valores dos campos de texto
-        let nomeInput = document.getElementById('nome').value.trim();
-        let cargoInput = document.getElementById('cargo').value.trim();
-
-        // Define valores padrão caso campos estejam vazios
-        const nomeExibido = nomeInput === "" ? "Seu Nome" : nomeInput;
-        const cargoExibido = cargoInput === "" ? "Seu Cargo / Setor" : cargoInput;
-
-        // Atualiza os elementos do preview da assinatura
-        document.getElementById('previewNome').innerText = nomeExibido;
-        document.getElementById('previewCargo').innerText = cargoExibido;
+        let nome = document.getElementById('nome').value.trim();
+        let cargoTexto = document.getElementById('cargoOab').value;
         
-        // NENHUMA referência a ramal ou linha de telefone
-        // A estrutura do HTML da assinatura já não possui elemento .ramal e não criamos nenhum dinamicamente.
+        if (nome === "") nome = "Seu Nome";
+        document.getElementById('previewNome').innerText = nome;
+        
+        let exibirCargo = cargoTexto.trim();
+        if (exibirCargo === "") {
+            exibirCargo = "Seu cargo ou setor";
+        }
+        document.getElementById('previewCargoOab').innerText = exibirCargo;
     }
 
-    // Função para garantir que a imagem (logo) seja carregada antes de exportar PNG
     async function aguardarImagem() {
         const imgElement = document.querySelector('#assinatura .ass-img');
         if (!imgElement) return Promise.resolve();
-        
-        // Se a imagem já estiver carregada e tiver src válida, resolvemos imediatamente
         if (imgElement.complete && imgElement.naturalWidth !== 0) {
             return Promise.resolve();
         }
-        
-        // Se não estiver carregada, aguarda evento load/reject caso erro
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             imgElement.onload = () => resolve();
-            imgElement.onerror = () => {
-                console.warn("Aviso: Logo não pôde ser carregada, continuando captura.");
-                resolve(); // continua mesmo sem a imagem para não travar
-            };
-            // timeout de segurança para não travar
-            setTimeout(resolve, 1500);
+            imgElement.onerror = () => resolve();
+            setTimeout(resolve, 1200);
         });
     }
 
-    // Função para baixar PNG com alta qualidade e fonte Dax preservada
     async function baixarPNG() {
         const areaAssinatura = document.getElementById('assinatura');
         if (!areaAssinatura) return;
-
-        // Mostrar um feedback sutil (opcional)
         const btn = event?.target;
-        const textoOriginal = btn?.innerText;
-        if (btn) btn.innerText = "⏳ Processando...";
-        
+        let textoOriginal = null;
+        if (btn) {
+            textoOriginal = btn.innerText;
+            btn.innerText = "Processando...";
+        }
         try {
-            // Aguarda a logo terminar de carregar (evita problemas de cross-origin e imagem quebrada)
             await aguardarImagem();
-            
-            // Usamos html2canvas com configurações otimizadas, garantindo renderização fiel da fonte Dax
             const canvas = await html2canvas(areaAssinatura, {
-                scale: 3.5,         // Alta resolução para impressão e clareza
+                scale: 3.5,
                 backgroundColor: '#ffffff',
-                useCORS: true,       // Suporta imagens cross-origin (desde que o servidor permita)
+                useCORS: true,
                 logging: false,
                 allowTaint: false,
                 windowWidth: areaAssinatura.scrollWidth,
                 windowHeight: areaAssinatura.scrollHeight,
                 onclone: (clonedDoc, element) => {
-                    // garantir que no clone a fonte Dax também seja aplicada (força estilo inline)
                     const clonedAss = clonedDoc.getElementById('assinatura');
                     if (clonedAss) {
                         clonedAss.style.fontFamily = "'Dax', 'Segoe UI', sans-serif";
                         const nomeClonado = clonedAss.querySelector('.nome');
-                        const cargoClonado = clonedAss.querySelector('.cargo');
+                        const cargoClonado = clonedAss.querySelector('.cargo-linha');
                         if (nomeClonado) nomeClonado.style.fontFamily = "'Dax', 'Segoe UI', sans-serif";
                         if (cargoClonado) cargoClonado.style.fontFamily = "'Dax', 'Segoe UI', sans-serif";
                     }
                 }
             });
-            
-            // Cria link para download
             const link = document.createElement('a');
-            let nomeArquivoBase = document.getElementById('nome').value.trim();
-            if (nomeArquivoBase === "") {
-                nomeArquivoBase = "assinatura_paese";
-            } else {
-                // sanitiza para nome de arquivo
-                nomeArquivoBase = nomeArquivoBase.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_').substring(0, 50);
-            }
-            link.download = `assinatura_${nomeArquivoBase}.png`;
+            let nomeBase = document.getElementById('nome').value.trim();
+            if (nomeBase === "") nomeBase = "assinatura_paese";
+            else nomeBase = nomeBase.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_').substring(0, 50);
+            link.download = `assinatura_${nomeBase}.png`;
             link.href = canvas.toDataURL('image/png', 1.0);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         } catch (error) {
             console.error("Erro ao gerar PNG: ", error);
-            alert("Não foi possível gerar a imagem. Verifique se a logo está acessível e tente novamente.");
+            alert("Erro ao gerar imagem. Verifique a logo e tente novamente.");
         } finally {
             if (btn && textoOriginal) btn.innerText = textoOriginal;
         }
     }
 
-    // Função para copiar HTML da assinatura (sem nenhuma dependência de ramal)
     function copiarHTML() {
-        // Obtém o elemento da assinatura
         const assinaturaElement = document.getElementById('assinatura');
         if (!assinaturaElement) return;
-
-        // Clonamos profundamente para evitar modificar o DOM original com estilos extras
         const cloneAssinatura = assinaturaElement.cloneNode(true);
-        
-        // Garantir que a fonte Dax seja explícita no HTML copiado para total fidelidade
-        // Injetamos regras de estilo inline e também adicionamos meta de fonte
         const estilosExtras = `
             <style>
-                /* Garantia máxima da fonte Dax no HTML copiado */
-                .nome, .cargo, #assinatura, .ass-img, div, span {
+                .nome, .cargo-linha, #assinatura {
                     font-family: 'Dax', 'Segoe UI', 'Roboto', sans-serif !important;
                 }
                 .nome {
                     font-size: 32px;
                     font-weight: 700;
-                    color: #101d17;
+                    color: #2C3E35;
                     margin-bottom: 6px;
                     letter-spacing: -0.3px;
                 }
-                .cargo {
+                .cargo-linha {
                     font-size: 18px;
                     color: #4b6b5a;
-                    margin-bottom: 8px;
                     font-weight: 500;
+                    line-height: 1.45;
+                    white-space: pre-wrap;
                 }
                 .ass-img {
                     max-width: 100%;
@@ -460,19 +407,6 @@
                 }
             </style>
         `;
-        
-        // Melhoramos para que não haja nenhum elemento fantasma de ramal (se por acaso existir em algum contexto)
-        // como removemos completamente do HTML principal, o clone também não possuirá nenhum texto de ramal.
-        // Mas para segurança, varremos qualquer possível span ou div com conteúdo que remeta a ramal.
-        const todosElementos = cloneAssinatura.querySelectorAll('*');
-        for (let el of todosElementos) {
-            if (el.innerText && (el.innerText.toLowerCase().includes('ramal') || el.innerText.match(/Ramal:?\s*\d+/i))) {
-                // remove nó completamente caso remanescente (backup)
-                if (el.parentNode) el.parentNode.removeChild(el);
-            }
-        }
-        
-        // Conteúdo final: HTML com estilo embutido e estrutura limpa.
         const htmlFinal = `<!DOCTYPE html>
         <html>
         <head><meta charset="UTF-8"><title>Assinatura Paese, Ferreira & Advogados</title>${estilosExtras}</head>
@@ -480,59 +414,21 @@
             ${cloneAssinatura.outerHTML}
         </body>
         </html>`;
-        
-        // Copiar para área de transferência
         navigator.clipboard.writeText(htmlFinal).then(() => {
-            alert("✅ HTML da assinatura copiado! Inclui fonte Dax e estilos. Use no seu cliente de e-mail.");
+            alert("HTML da assinatura copiado! Inclui fonte Dax e quebra de linha para OAB.");
         }).catch(() => {
-            alert("❌ Não foi possível copiar. Permissão negada.");
+            alert("Não foi possível copiar. Permissão negada.");
         });
     }
 
-    // Inicialização: garantir que ao carregar a página não haja qualquer texto de ramal no DOM
-    function removerQualquerResquicioRamal() {
-        // varre o documento em busca de qualquer elemento que contenha texto "Ramal" ou similar dentro da assinatura
-        const assinaturaDiv = document.getElementById('assinatura');
-        if (assinaturaDiv) {
-            // encontra qualquer elemento que possa ter sido inserido dinamicamente ou herdado
-            const elementosPossiveis = assinaturaDiv.querySelectorAll('*');
-            for (let el of elementosPossiveis) {
-                // se existir algum elemento com classe .ramal ou com texto contendo "Ramal:" remove
-                if (el.classList && el.classList.contains('ramal')) {
-                    el.remove();
-                }
-                if (el.innerText && (el.innerText.includes('Ramal:') || el.innerText.includes('ramal'))) {
-                    // Se for texto puro, limpamos o innerText para não mostrar ramal
-                    if (el.className !== 'nome' && el.className !== 'cargo') {
-                        el.innerText = '';
-                        el.style.display = 'none';
-                    }
-                }
-            }
-        }
-        // Garantir que nenhum placeholder indesejado exista
-        const previewRamalAntigo = document.getElementById('previewRamal');
-        if (previewRamalAntigo) previewRamalAntigo.remove();
-    }
-
-    // Inicialização do preview e limpeza total do ramal
     function inicializar() {
-        removerQualquerResquicioRamal();
         renderizarAssinatura();
-        
-        // Verificação extra: campo ramal fisicamente não existe no HTML, mas garantimos ausência completa.
-        // como não há input de ramal, nenhum dado será processado.
-        // Adicionamos eventuais listeners nos inputs para sempre atualizar sem ramal.
         const nomeCampo = document.getElementById('nome');
-        const cargoCampo = document.getElementById('cargo');
+        const cargoCampo = document.getElementById('cargoOab');
         if (nomeCampo) nomeCampo.addEventListener('input', renderizarAssinatura);
         if (cargoCampo) cargoCampo.addEventListener('input', renderizarAssinatura);
-        
-        // Forçar re-render caso a logo demore, mas sem ramal
-        // Corrigir possível exibição de fallback 
         const logoImg = document.querySelector('.ass-img');
         if (logoImg && logoImg.src && logoImg.src.includes('img/logoPad.png')) {
-            // Se a imagem não carregar, mantemos o espaço mas sem mensagem de erro intrusiva
             logoImg.onerror = () => {
                 logoImg.style.opacity = '0.8';
                 logoImg.alt = "Paese, Ferreira Logo";
@@ -540,19 +436,10 @@
         }
     }
 
-    // Chamada inicial
-    inicializar();
-    
-    // Exportar funções globalmente para os botões onclick
     window.baixarPNG = baixarPNG;
     window.copiarHTML = copiarHTML;
     window.renderizarAssinatura = renderizarAssinatura;
-    
-    // também assegurar que em qualquer evento de redimensionamento ou mudança o ramal não retorne
-    document.addEventListener('DOMContentLoaded', () => {
-        removerQualquerResquicioRamal();
-        renderizarAssinatura();
-    });
+    inicializar();
 </script>
 </body>
 </html>
